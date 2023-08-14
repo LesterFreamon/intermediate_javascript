@@ -1,4 +1,3 @@
-
 class Dinosaur {
     constructor({ species, weight, height, diet, where, when, fact }) {
         this.species = species
@@ -14,14 +13,52 @@ class Dinosaur {
         return this.species;
     }
 
-    getAFact() {
+    compareHeight(human) {
+        const humanHeight = human.height;
+        const dinoHeight = this.height;
+        if (humanHeight > dinoHeight) {
+            return `are ${humanHeight - dinoHeight} inches taller than ${this.species}`;
+        } else if (humanHeight < dinoHeight) {
+            return `${this.species} is ${dinoHeight - humanHeight} inches taller than you`;
+        } else {
+            return `are as tall as ${this.species}`;
+        }
+    }
+
+    compareWeight(human) {
+        const humanWeight = human.weight;
+        const dinoWeight = this.weight;
+        if (humanWeight > dinoWeight) {
+            return `are ${humanWeight - dinoWeight} lbs heavier than ${this.species}`;
+        } else if (humanWeight < dinoWeight) {
+            return `${this.species} is ${dinoWeight - humanWeight} lbs heavier than you`;
+        } else {
+            return `weigh the same as ${this.species}`;
+        }
+    }
+
+    comparePlace(human) {
+        const humanPlace = human.where;
+        const dinoPlace = this.where;
+        if (humanPlace == dinoPlace) {
+            return `And you both lived in ${humanPlace}`;
+        } else {
+            return `You lived in ${humanPlace} while ${this.species} lived in ${dinoPlace}`;
+        }
+    }
+
+    getAFact(human) {
         const facts = [
             `This dinosaur weighed ${this.weight} lbs`,
             `It stood at a height of ${this.height} inches`,
             `It was a ${this.diet}`,
             `It lived in ${this.where}`,
             `It existed in the  ${this.when} period`,
-            this.fact
+            this.fact,
+            this.compareHeight(human),
+            this.compareWeight(human),
+            this.comparePlace(human),
+
         ];
 
         const randomIndex = Math.floor(Math.random() * facts.length);
@@ -38,7 +75,7 @@ class Dinosaur {
 }
 
 class Bird extends Dinosaur {
-    constructor({ species, weight, height, diet, where, when, fact, wingSpan }) {
+    constructor({ species, weight, height, diet, where, when, fact }) {
         super({ species, weight, height, diet, where, when, fact });
     }
 
@@ -49,46 +86,14 @@ class Bird extends Dinosaur {
 }
 
 class Human {
-    constructor({ name, weight, height, where }) {
+    constructor({ name, weight, height, residence }) {
         this.name = name;
         this.weight = weight;
         this.height = height;
-        this.where = where;
+        this.where = residence;
+        console.log(this.name, this.weight, this.height, this.where);
     }
 
-    compareHeight(dino) {
-        const humanHeight = this.height;
-        const dinoHeight = dino.height;
-        if (humanHeight > dinoHeight) {
-            return `are ${humanHeight - dinoHeight} inches taller than ${dino.species}`;
-        } else if (humanHeight < dinoHeight) {
-            return `${dino.species} is ${dinoHeight - humanHeight} inches taller than you`;
-        } else {
-            return `are as tall as ${dino.species}`;
-        }
-    }
-
-    compareWeight(dino) {
-        const humanWeight = this.weight;
-        const dinoWeight = dino.weight;
-        if (humanWeight > dinoWeight) {
-            return `are ${humanWeight - dinoWeight} lbs heavier than ${dino.species}`;
-        } else if (humanWeight < dinoWeight) {
-            return `${dino.species} is ${dinoWeight - humanWeight} lbs heavier than you`;
-        } else {
-            return `weigh the same as ${dino.species}`;
-        }
-    }
-
-    comparePlace(dino) {
-        const humanPlace = this.where;
-        const dinoPlace = dino.where;
-        if (humanPlace == dinoPlace) {
-            return `And you both lived in ${humanPlace}`;
-        } else {
-            return `You lived in ${humanPlace} while ${dino.species} lived in ${dinoPlace}`;
-        }
-    }
     getImagePath() {
         return `./static/images/human.png`;
     }
@@ -96,27 +101,25 @@ class Human {
     getTitle() {
         return this.name;
     }
-
-    getInfo(dino) {
-        return `When comparing to ${dino.species}
-        <br>${this.compareHeight(dino)}
-        <br>${this.compareWeight(dino)}
-        <br>${this.comparePlace(dino)}`
-
-    }
 }
 
 let dinosaurs = [];
 
-function fillCell(dino, information) {
+
+function fillTitleAndImage(creature) {
     const cell = document.createElement('td');
-    cell.innerHTML = `<h3>${dino.getTitle()}</h3`;
+    cell.innerHTML = `<h3>${creature.getTitle()}</h3`;
     const img = document.createElement('img');
-    img.src = dino.getImagePath();
-    img.alt = `An image of ${dino.name}`
+    img.src = creature.getImagePath();
+    img.alt = `An image of ${creature.getTitle()}`
     img.style.width = '50%';
     img.style.height = 'auto';  // Preserve aspect ratio
     cell.appendChild(img);
+    return cell;
+}
+
+function fillCell(dino, information) {
+    let cell = fillTitleAndImage(dino);
     cell.innerHTML += `<p>${information}</p>`;
     return cell;
 }
@@ -159,14 +162,12 @@ document.getElementById('dino-form').addEventListener('submit', function (e) {
             let dinoIndex = (i * 3) + j - goBack;
             let thisDino = dinosaurs[dinoIndex];
             if ((i != 1) || (j != 1)) {
-                const information = thisDino.getAFact();
-                row.appendChild(fillCell(thisDino, information)); 
+                const information = thisDino.getAFact(human);
+                row.appendChild(fillCell(thisDino, information));
             }
             else {
                 goBack = 1;
-                const randomNumber = Math.floor(Math.random() * 9);
-                const information = human.getInfo(dinosaurs[randomNumber]);
-                row.appendChild(fillCell(human, information));
+                row.appendChild(fillTitleAndImage(human));
             }
         }
         tbody.appendChild(row);
@@ -178,7 +179,7 @@ document.getElementById('dino-form').addEventListener('submit', function (e) {
 });
 
 
-document.getElementById('showFormBtn').addEventListener('click', function() {
+document.getElementById('showFormBtn').addEventListener('click', function () {
     const formDiv = document.getElementById('form-div');
     if (formDiv.style.display === 'none' || formDiv.style.display === '') {
         formDiv.style.display = 'block';
