@@ -143,15 +143,24 @@ tbody tr:nth-child(3) td:nth-child(3) {
     margin-right: auto;
 }
 #dino-compare td {
-    padding: 8px;
     text-align: center;
     border: none;
     font-family: 'Dinosaur', sans-serif;
     box-sizing: border-box;
+    padding: 0px;
 }
 
 #tableContainer > div {
     display: flex;
     justify-content: center;
     width: 100%;
+    padding: 0px;
+}
+
+
+.bottom-td {
+    background-color: rgba(100, 100, 100, 0.4);
+    margin: 0px;
+    padding: 0px;
+    color: white;
 }
