@@ -120,7 +120,7 @@ function fillTitleAndImage(creature) {
 
 function fillCell(dino, information) {
     let cell = fillTitleAndImage(dino);
-    cell.innerHTML += `<p>${information}</p>`;
+    cell.innerHTML += `<div>${information}</div>`;
     return cell;
 }
 fetch("./static/dino.json")
@@ -146,6 +146,13 @@ document.getElementById('dino-form').addEventListener('submit', function (e) {
     const weight = document.getElementById('weight').value;
     const height = document.getElementById('height').value;
     const residence = document.getElementById('residence').value;
+
+    // Store the form values in local storage
+    localStorage.setItem('dinoFormValues', JSON.stringify({ name, weight, height, residence }));
+    populateTable({ name, weight, height, residence });
+});
+
+function populateTable({ name, weight, height, residence }) {
     const human = new Human({ name, weight, height, residence });
 
     // Populate table
@@ -176,7 +183,7 @@ document.getElementById('dino-form').addEventListener('submit', function (e) {
     // Show table and hide form
     document.getElementById('tableContainer').style.display = 'block';
     document.getElementById('form-div').style.display = 'none';
-});
+}
 
 
 document.getElementById('showFormBtn').addEventListener('click', function () {
