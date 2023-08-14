@@ -120,7 +120,7 @@ function fillTitleAndImage(creature) {
 
 function fillCell(dino, information) {
     let cell = fillTitleAndImage(dino);
-    cell.innerHTML += `<div>${information}</div>`;
+    cell.innerHTML += `<div class="bottom-td">${information}</div>`;
     return cell;
 }
 fetch("./static/dino.json")
