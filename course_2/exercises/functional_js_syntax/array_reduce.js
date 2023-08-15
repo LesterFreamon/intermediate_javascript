@@ -2,7 +2,7 @@
 const text = ['The ships', 'hung in the sky,', 'much the way', 'that bricks don`t']
 
 // Your Code Here
-
+console.log(text.reduce((soFar, thisPart) => soFar + " " +thisPart));
 // expected output: "The ships hung in the sky, much the way that bricks don't"
 
 // ----------------------------------------------------------
@@ -28,7 +28,7 @@ const scores = [
 ]
 
 // Your Code Here
-
+console.log(scores.reduce((highestTeam, thisTeam) => highestTeam.score > thisTeam.score? highestTeam: thisTeam).team);
 // expected output: "C"
 
 // ----------------------------------------------------------
@@ -58,5 +58,5 @@ const ships = [
 ]
 
 // Your Code Here
-
+console.log(ships.reduce((fastestShip, thisShip) => parseFloat(fastestShip.speed.substring(0, -1)) > parseFloat(thisShip.speed.substring(0, -1))? fastestShip: thisShip).name);
 // Expected output: Tie Fighters

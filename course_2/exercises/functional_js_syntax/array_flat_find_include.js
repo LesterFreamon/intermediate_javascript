@@ -12,10 +12,10 @@ const characters = [
 ]
 
 const results = characters.flat(1)
-// const results = characters.flat(2)
-// const results = characters.flat(3)
+console.log(characters.flat(2));
+console.log(characters.flat(3));
 // And what happens if you go past the max depth of the array?
-// const results = characters.flat(5)
+console.log(characters.flat(5));
 
 // ----------------------------------------------------------
 // FIND EXERCISE
@@ -32,6 +32,8 @@ const ids = [
     'ABCKO',
     'IUABC'
 ]
+
+console.log(ids.find(id => id.includes('ABC')));
 
 
 // ----------------------------------------------------------
@@ -51,6 +53,7 @@ const admins = [
     '12mnz09v87bas78fb12',
     '098Xc8x76m3nb4aposi'
 ]
+console.log(admins.includes(currentUserId));
 
 // ----------------------------------------------------------
 
@@ -75,3 +78,7 @@ const B = [
     '298374naskdj273ubsl',
     '098LKJnsvijevkwejf6'
 ]
+
+console.log(
+    A.filter(item => B.includes(item))
+    );

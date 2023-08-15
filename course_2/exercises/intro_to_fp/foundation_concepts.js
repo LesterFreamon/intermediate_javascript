@@ -2,7 +2,7 @@
 let greeting = 'Hello, '
 
 const greet = (name) => {
-    return greeting += name
+    return `${greeting}${name}`;
 }
 
 // This code looks fine at first, but what if we needed to use this greet function again? 
