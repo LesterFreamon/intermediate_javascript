@@ -101,6 +101,9 @@ const characters = [
 // Create an array containing only the names of Captains from all universes.
 
 // Your Code here
+console.log(
+  characters.filter(thisChar => thisChar.role == 'Captain').map(thisChar => thisChar.name)
+  );
 
 // expected output: ['Mal Reynolds', 'Kathryn Janeway']
 
@@ -113,7 +116,19 @@ const characters = [
 // Group all characters by universe in a multidimensional array
 
 // Your Code here
+console.log(
+  characters
+    .reduce((acc, curr, i, arr) => {
+        acc[curr.universe] = acc[curr.universe] === undefined ? [] : acc[curr.universe]
+        acc[curr.universe].push(curr)
 
+        if (i + 1 == arr.length) {
+            return Object.values(acc)
+        }
+
+        return acc
+ }, {})
+);
 // expected output:
 
 // [ 

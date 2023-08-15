@@ -91,7 +91,6 @@ class Human {
         this.weight = weight;
         this.height = height;
         this.where = residence;
-        console.log(this.name, this.weight, this.height, this.where);
     }
 
     getImagePath() {
@@ -123,6 +122,7 @@ function fillCell(dino, information) {
     cell.innerHTML += `<div class="bottom-td">${information}</div>`;
     return cell;
 }
+
 fetch("./static/dino.json")
     .then(response => response.json())
     .then(dinoData => {
@@ -137,20 +137,6 @@ fetch("./static/dino.json")
         });
     })
     .catch(error => console.error('Error fetching the JSON file:', error));
-
-document.getElementById('dino-form').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevents the form from submitting in the traditional way
-
-    // Extract form values
-    const name = document.getElementById('name').value;
-    const weight = document.getElementById('weight').value;
-    const height = document.getElementById('height').value;
-    const residence = document.getElementById('residence').value;
-
-    // Store the form values in local storage
-    localStorage.setItem('dinoFormValues', JSON.stringify({ name, weight, height, residence }));
-    populateTable({ name, weight, height, residence });
-});
 
 function populateTable({ name, weight, height, residence }) {
     const human = new Human({ name, weight, height, residence });
@@ -184,6 +170,22 @@ function populateTable({ name, weight, height, residence }) {
     document.getElementById('tableContainer').style.display = 'block';
     document.getElementById('form-div').style.display = 'none';
 }
+
+document.getElementById('dino-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevents the form from submitting in the traditional way
+
+    // Extract form values
+    const name = document.getElementById('name').value;
+    const weight = document.getElementById('weight').value;
+    const height = document.getElementById('height').value;
+    const residence = document.getElementById('residence').value;
+
+    // Store the form values in local storage
+    localStorage.setItem('dinoFormValues', JSON.stringify({ name, weight, height, residence }));
+    populateTable({ name, weight, height, residence });
+});
+
+
 
 
 document.getElementById('showFormBtn').addEventListener('click', function () {

@@ -2,7 +2,8 @@
 const start = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 // your code
-
+const reverseArray = start.map(thisValue => start[10 - thisValue]);
+console.log(reverseArray);
 // expected output: Array [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 // ----------------------------------------------------------
@@ -10,7 +11,8 @@ const start = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 const shipMates = [["Mal", "Captain"], ["Wash", "Pilot"], ["Zoey", "1st Mate"], ["Jayne", "Public Relations"]]
 
 // your code
-
+const concatenateMates = shipMates.map(shipMate => `${shipMate[1]}: ${shipMate[0]}`);
+console.log(concatenateMates);
 // expected output: Array ["Captain: Mal", etc...]
 
 // ----------------------------------------------------------
@@ -18,7 +20,8 @@ const shipMates = [["Mal", "Captain"], ["Wash", "Pilot"], ["Zoey", "1st Mate"], 
 const awayTeam = ["Picard", "Riker", "Troy", "Data"]
 
 // your code
-
+const evenOdd = awayTeam.map((name, index) => `${name}: ${index % 2 == 0 ? "even": "odd"}`);
+console.log(evenOdd);
 // expected output: Array: ["Picard: even", "Riker: odd", etc...]
 
 // ----------------------------------------------------------
@@ -27,7 +30,8 @@ const awayTeam = ["Picard", "Riker", "Troy", "Data"]
 const sci_fi_shows = ['Manedlorian', 'Enterprise', 'Firefly', 'Battlestar Galactica']
 
 // your code
-
+const addIndex = sci_fi_shows.map((name, index) => [name, index]);
+console.log(addIndex);
 // expected output: Array [['Manedlorian', 0], ['Enterprise', 1], ['Firefly', 2], ['Battlestar Galactica', 3]]
 
 // ----------------------------------------------------------
@@ -36,7 +40,8 @@ const sci_fi_shows = ['Manedlorian', 'Enterprise', 'Firefly', 'Battlestar Galact
 const numbers = [1, 2, 3, 4]
 
 // your code
-
+const duplicateArray = numbers.map((number, index, array) => array);
+console.log(duplicateArray);
 // expected output: Array [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]
 
 // Having trouble with creating a 2D array? 

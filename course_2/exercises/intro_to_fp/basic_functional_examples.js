@@ -5,7 +5,17 @@
 // Hint - this will help with time of day: new Date().getHours()
 // -----------------------------------------------------------------
 
+function greet() {
+    const newHour = new Date().getHours();
+    if (newHour >= 12) {
+        return "good afternoon";
+    }
+    else {
+        return "good morning";
+    }
+}
 
+console.log(greet());
 
 
 // -----------------------------------------------------------------
@@ -14,5 +24,17 @@
 //       returns an array of items counting down from that number to 
 //       zero.
 // -----------------------------------------------------------------
+function createCountdownArray(number) {
+    if (number < 0) {
+        return [];
+    }
+    let newArray = [];
+    for (let i = number; i >= 0; i--) {
+        newArray.push(i);
+    }
+    return newArray;
+}
 
+console.log(createCountdownArray(2));
+console.log(createCountdownArray(-1));
 
