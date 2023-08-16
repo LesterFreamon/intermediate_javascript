@@ -130,3 +130,6 @@ dmypy.json
 
 .idea/
 .vscode/
+
+# js stuff
+node_modules/
