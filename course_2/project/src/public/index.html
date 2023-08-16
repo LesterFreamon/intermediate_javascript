@@ -1,20 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="assets/stylesheets/resets.css">
+    <link rel="stylesheet" href="assets/stylesheets/index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/4.0.0-rc.12/immutable.min.js"></script>
+    <title>NASA Mars Rover Dashboard</title>
 </head>
-
 <body>
-    <main>
-        <div id="root">
-            <h1>Loading...</h1>
+    <header>
+        <h1>NASA Mars Rover Dashboard</h1>
+    </header>
+    <nav>
+        <label for="rover-selection">Select Rover:</label>
+        <select id="rover-selection" aria-label="Rover Selection">
+            <option value="curiosity">Curiosity</option>
+            <option value="opportunity">Opportunity</option>
+            <option value="spirit">Spirit</option>
+        </select>
+    </nav>
+    <main id="root">
+        <div class="rover-info">
+            <h2>${selectedRover.rover.name}</h2>
+            <dl>
+                <dt>Landing Date:</dt>
+                <dd>${selectedRover.rover.landing_date}</dd>
+        
+                <dt>Launch Date:</dt>
+                <dd>${selectedRover.rover.launch_date}</dd>
+        
+                <dt>Retirement Date:</dt>
+                <dd>${selectedRover.rover.max_date}</dd>
+        
+                <dt>Status:</dt>
+                <dd>${selectedRover.rover.status}</dd>
+        
+                <dt>Total Photos:</dt>
+                <dd>${selectedRover.rover.total_photos.toLocaleString()}</dd>
+            </dl>
         </div>
     </main>
+    <script src="client.js"></script>
 </body>
-<script src="/client.js"></script>
-
 </html>

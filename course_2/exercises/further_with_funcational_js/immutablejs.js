@@ -27,6 +27,9 @@ const map2 = Immutable.Map({
   history: ["Browncoat sergeant"]
 });
 
+const map3 = map1.set('name', 'Mal').set('role', 'Captain');
+
+
 // YOUR TURN --------------------------------------------------------------
 // create `map3` immutable object by merging `map1` and `map2`
 
@@ -53,7 +56,7 @@ console.log(map4.toJS())
 // Can you locate the contents of our variable 'obj' inside the Immutable Map map3?
 
 //Your code
-
+console.log(map3.get('d'));
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
 

@@ -1,46 +1,74 @@
-let store = {
-    user: { name: "Student" },
+let store = Immutable.Map({
+    user: Immutable.Map({ name: "Student" }),
     apod: '',
-    rovers: ['Curiosity', 'Opportunity', 'Spirit'],
-}
+    rovers: Immutable.List(['Curiosity', 'Opportunity', 'Spirit']),
+    selectedRover: null,
+    roverPhotos: [],
+});
+
 
 // add our markup to the page
 const root = document.getElementById('root')
 
-const updateStore = (store, newState) => {
-    store = Object.assign(store, newState)
-    render(root, store)
+
+const updateStore = (newState) => {
+    store = store.merge(newState);
+    render(root, store);
 }
 
 const render = async (root, state) => {
     root.innerHTML = App(state)
 }
 
+const RoverInfo = (selectedRover) => {
+    if (!selectedRover) return '';
+    console.log(selectedRover.rover);
+    return `
+    <div class="rover-info">
+    <h2>${selectedRover.rover.name}</h2>
+    <dl>
+        <dt>Landing Date:</dt>
+        <dd>${selectedRover.rover.landing_date}</dd>
 
-// create content
+        <dt>Launch Date:</dt>
+        <dd>${selectedRover.rover.launch_date}</dd>
+
+        <dt>Retirement Date:</dt>
+        <dd>${selectedRover.rover.max_date}</dd>
+
+        <dt>Status:</dt>
+        <dd>${selectedRover.rover.status}</dd>
+
+        <dt>Total Photos:</dt>
+        <dd>${selectedRover.rover.total_photos.toLocaleString()}</dd>
+    </dl>
+</div>
+    `;
+}
+
+const RoverPhotos = (photos) => {
+    if (!photos || photos.length === 0) return '';
+
+    const photoElements = photos.map(photo => `
+        <li>
+            <img src="${photo.img_src}" alt="Rover photo taken by ${photo.camera.full_name}" />
+        </li>
+    `).join('');
+
+    return `<ul class="rover-photos">${photoElements}</ul>`;
+}
 const App = (state) => {
-    let { rovers, apod } = state
+    let { rovers, apod, selectedRover, roverPhotos } = state.toJS();
 
     return `
         <header></header>
         <main>
-            ${Greeting(store.user.name)}
-            <section>
-                <h3>Put things on the page!</h3>
-                <p>Here is an example section.</p>
-                <p>
-                    One of the most popular websites at NASA is the Astronomy Picture of the Day. In fact, this website is one of
-                    the most popular websites across all federal agencies. It has the popular appeal of a Justin Bieber video.
-                    This endpoint structures the APOD imagery and associated metadata so that it can be repurposed for other
-                    applications. In addition, if the concept_tags parameter is set to True, then keywords derived from the image
-                    explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds;
-                    but generally help with discoverability of relevant imagery.
-                </p>
-                ${ImageOfTheDay(apod)}
-            </section>
+            ${Greeting(store.get('user').get('name'))}
+            ${RoverInfo(selectedRover)}
+            ${RoverPhotos(roverPhotos)}
         </main>
         <footer></footer>
-    `
+    `;
 }
 
 // listening for load event because page should load before any JS is called
@@ -72,7 +100,7 @@ const ImageOfTheDay = (apod) => {
     console.log(photodate.getDate(), today.getDate());
 
     console.log(photodate.getDate() === today.getDate());
-    if (!apod || apod.date === today.getDate() ) {
+    if (!apod || apod.date === today.getDate()) {
         getImageOfTheDay(store)
     }
 
@@ -94,12 +122,31 @@ const ImageOfTheDay = (apod) => {
 // ------------------------------------------------------  API CALLS
 
 // Example API call
-const getImageOfTheDay = (state) => {
-    let { apod } = state
-
-    fetch(`http://localhost:3000/apod`)
+const getRoverData = (roverName) => {
+    console.log("Fetching data for:", roverName);  // Debugging line
+    fetch(`http://localhost:3000/rover/${roverName}`)
         .then(res => res.json())
-        .then(apod => updateStore(store, { apod }))
-
-    return data
+        .then(data => {
+            updateStore({ selectedRover: data });
+        })
+        .catch(error => {
+            console.error("Error fetching rover data:", error);
+        });
 }
+
+
+const getRoverPhotos = (roverName) => {
+    fetch(`http://localhost:3000/rover/${roverName}/photos`)
+        .then(res => res.json())
+        .then(data => {
+            updateStore(store, { roverPhotos: data.photos });
+        });
+}
+
+
+document.getElementById("rover-selection").addEventListener("change", (event) => {
+    const roverName = event.target.value;
+    getRoverData(roverName);
+    getRoverPhotos(roverName);
+});
+
