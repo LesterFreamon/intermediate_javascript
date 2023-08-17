@@ -20,28 +20,34 @@ const render = async (root, state) => {
     root.innerHTML = App(state)
 }
 
-const RoverInfo = (selectedRover) => {
+
+const createInfoDisplay = (info) => {
+    return Object.entries(info).map(([key, value]) => `
+        <dt>${key}:</dt>
+        <dd>${value}</dd>
+    `).join('');
+};
+
+const RoverInfo = (selectedRover, cb) => {
     if (!selectedRover) return '';
+
+    const info = {
+        'Launch Date': selectedRover.rover.launch_date,
+        'Landing Date': selectedRover.rover.landing_date,
+        'Retirement Date': selectedRover.rover.max_date,
+        'Status': selectedRover.rover.status,
+        'Total Photos': selectedRover.rover.total_photos.toLocaleString()
+    };
+
     return `
-    <div class="col-3 meta-data">
-    <h3>Information</h3>
-    <dl>
-    <dt>Launch Date:</dt>
-        <dd>${selectedRover.rover.launch_date}</dd>    
-    <dt>Landing Date:</dt>
-        <dd>${selectedRover.rover.landing_date}</dd>
-        <dt>Retirement Date:</dt>
-        <dd>${selectedRover.rover.max_date}</dd>
-
-        <dt>Status:</dt>
-        <dd>${selectedRover.rover.status}</dd>
-
-        <dt>Total Photos:</dt>
-        <dd>${selectedRover.rover.total_photos.toLocaleString()}</dd>
-    </dl>
-</div>
+        <div class="col-3 meta-data">
+            <h3>Information</h3>
+            <dl>
+                ${cb(info)}
+            </dl>
+        </div>
     `;
-}
+};
 
 const RoverPhotos = (photos) => {
     if (!photos || photos.length === 0) return '';
@@ -67,7 +73,7 @@ const App = (state) => {
     <div class="rover-info">
     <h2>${selectedRover.rover.name}</h2>
         <div class="row">
-            ${RoverInfo(selectedRover)}
+            ${RoverInfo(selectedRover, createInfoDisplay)}
             ${RoverPhotos(roverPhotos)}
         </div>
         </div>
@@ -95,61 +101,22 @@ const Greeting = (name) => {
     `
 }
 
-// Example of a pure function that renders infomation requested from the backend
-const ImageOfTheDay = (apod) => {
-
-    // If image does not already exist, or it is not from today -- request it again
-    const today = new Date()
-    if (!apod || apod.date === today.getDate()) {
-        getImageOfTheDay(store)
-    }
-
-    // check if the photo of the day is actually type video!
-    if (apod.media_type === "video") {
-        return (`
-            <p>See today's featured video <a href="${apod.url}">here</a></p>
-            <p>${apod.title}</p>
-            <p>${apod.explanation}</p>
-        `)
-    } else {
-        return (`
-            <img src="${apod.image.url}" height="350px" width="100%" />
-            <p>${apod.image.explanation}</p>
-        `)
-    }
-}
-
 // ------------------------------------------------------  API CALLS
 
-const getRoverData = (roverName) => {
-    fetch(`http://localhost:3000/rover/${roverName}`)
+// Higher-order function: Fetch and update
+const fetchAndUpdate = (endpoint, updateFn) => {
+    fetch(endpoint)
         .then(res => res.json())
-        .then(data => {
-            updateStore({ selectedRover: data });
-        })
-        .catch(error => {
-            console.error("Error fetching rover data:", error);
-        });
+        .then(data => updateFn(data))
+        .catch(error => console.error(`Error fetching from endpoint: ${endpoint}`, error));
 }
-
-const getRoverPhotos = (roverName) => {
-    fetch(`http://localhost:3000/rover/${roverName}/photos`)
-        .then(res => res.json())
-        .then(data => {
-            updateStore({ roverPhotos: data.photos });
-        })
-        .catch(error => {
-            console.error("Error fetching rover photos:", error);
-        });
-}
-
 
 document.getElementById("rover-selection").addEventListener("change", (event) => {
     const roverName = event.target.value;
     if (roverName === '') {
         updateStore({ selectedRover: null, roverPhotos: [] });
     } else {
-        getRoverData(roverName);
-        getRoverPhotos(roverName);
+        fetchAndUpdate(`http://localhost:3000/rover/${roverName}`, data => updateStore({ selectedRover: data }));
+        fetchAndUpdate(`http://localhost:3000/rover/${roverName}/photos`, data => updateStore({ roverPhotos: data.photos }));
     }
 });
