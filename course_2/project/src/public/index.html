@@ -1,29 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/stylesheets/resets.css">
     <link rel="stylesheet" href="assets/stylesheets/index.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/4.0.0-rc.12/immutable.min.js"></script>
     <title>NASA Mars Rover Dashboard</title>
 </head>
+
 <body>
-    <header>
+    <header class="bg-primary text-white text-center py-3">
         <h1>NASA Mars Rover Dashboard</h1>
     </header>
-    <nav>
+    <nav class="p-3">
         <label for="rover-selection">Select Rover:</label>
-        <select id="rover-selection" aria-label="Rover Selection">
-            <option value="">None</option>
+        <select id="rover-selection" aria-label="Rover Selection" class="form-control w-auto d-inline-block">
+            <option value="" selected>Select a Rover</option>
             <option value="curiosity">Curiosity</option>
             <option value="opportunity">Opportunity</option>
             <option value="spirit">Spirit</option>
         </select>
     </nav>
-    <main id="root">
-      
+    <main id="root" class="container mt-4">
+        
     </main>
+    <!-- Optional Bootstrap JavaScript, and your client.js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="client.js"></script>
 </body>
+
 </html>

@@ -3,8 +3,16 @@
 body {
   display: flex;
   flex-direction: column;
-  font-family: Arial;
+  font-family: "Times New Roman", Times, serif;
+  background: linear-gradient(180deg, rgb(171,228,167), rgb(131,215,205));
   min-height: 100vh;
+}
+
+h1 {
+  text-align: center;
+}
+nav {
+  text-align: center;
 }
 
 header {
@@ -66,4 +74,7 @@ footer {
 .rover-info dd {
   margin-left: 20px;
   color: #777;
+}
+.meta-data {
+  border-right: 1px solid lightgray;
 }

@@ -22,17 +22,14 @@ const render = async (root, state) => {
 
 const RoverInfo = (selectedRover) => {
     if (!selectedRover) return '';
-    console.log(selectedRover.rover);
     return `
-    <div class="rover-info">
-    <h2>${selectedRover.rover.name}</h2>
+    <div class="col-3 meta-data">
+    <h3>Information</h3>
     <dl>
-        <dt>Landing Date:</dt>
+    <dt>Launch Date:</dt>
+        <dd>${selectedRover.rover.launch_date}</dd>    
+    <dt>Landing Date:</dt>
         <dd>${selectedRover.rover.landing_date}</dd>
-
-        <dt>Launch Date:</dt>
-        <dd>${selectedRover.rover.launch_date}</dd>
-
         <dt>Retirement Date:</dt>
         <dd>${selectedRover.rover.max_date}</dd>
 
@@ -49,24 +46,31 @@ const RoverInfo = (selectedRover) => {
 const RoverPhotos = (photos) => {
     if (!photos || photos.length === 0) return '';
 
+
     const photoElements = photos.map(photo => `
-        <li>
+        <div class="col-4">
             <img src="${photo.img_src}" alt="Rover photo taken by ${photo.camera.full_name}" />
-        </li>
+            <p>Taken from "${photo.camera.full_name}" on ${photo.earth_date}</p>
+        </div>
     `).join('');
 
-    return `<ul class="rover-photos">${photoElements}</ul>`;
+    return `<div class="col-9"><div class="row text-center"><div class="col"><h3>Latest Images</h3></div></div><div class="row">${photoElements}</div></div>`;
 }
+
 const App = (state) => {
     let { rovers, apod, selectedRover, roverPhotos } = state.toJS();
-
+    console.log(selectedRover);
+    if (selectedRover === null) {
+        return `${Greeting(store.get('user').get('name'))}`
+    }
     return `
-        <header></header>
-        <main>
-            ${Greeting(store.get('user').get('name'))}
+    <div class="rover-info">
+    <h2>${selectedRover.rover.name}</h2>
+        <div class="row">
             ${RoverInfo(selectedRover)}
             ${RoverPhotos(roverPhotos)}
-        </main>
+        </div>
+        </div>
         <footer></footer>
     `;
 }
@@ -82,7 +86,7 @@ window.addEventListener('load', () => {
 const Greeting = (name) => {
     if (name) {
         return `
-            <h1>Welcome, ${name}!</h1>
+            <h1>Welcome, ${name}! Please select the rover you want to call.</h1>
         `
     }
 
@@ -96,10 +100,6 @@ const ImageOfTheDay = (apod) => {
 
     // If image does not already exist, or it is not from today -- request it again
     const today = new Date()
-    const photodate = new Date(apod.date)
-    console.log(photodate.getDate(), today.getDate());
-
-    console.log(photodate.getDate() === today.getDate());
     if (!apod || apod.date === today.getDate()) {
         getImageOfTheDay(store)
     }
@@ -121,9 +121,7 @@ const ImageOfTheDay = (apod) => {
 
 // ------------------------------------------------------  API CALLS
 
-// Example API call
 const getRoverData = (roverName) => {
-    console.log("Fetching data for:", roverName);  // Debugging line
     fetch(`http://localhost:3000/rover/${roverName}`)
         .then(res => res.json())
         .then(data => {
@@ -134,19 +132,24 @@ const getRoverData = (roverName) => {
         });
 }
 
-
 const getRoverPhotos = (roverName) => {
     fetch(`http://localhost:3000/rover/${roverName}/photos`)
         .then(res => res.json())
         .then(data => {
-            updateStore(store, { roverPhotos: data.photos });
+            updateStore({ roverPhotos: data.photos });
+        })
+        .catch(error => {
+            console.error("Error fetching rover photos:", error);
         });
 }
 
 
 document.getElementById("rover-selection").addEventListener("change", (event) => {
     const roverName = event.target.value;
-    getRoverData(roverName);
-    getRoverPhotos(roverName);
+    if (roverName === '') {
+        updateStore({ selectedRover: null, roverPhotos: [] });
+    } else {
+        getRoverData(roverName);
+        getRoverPhotos(roverName);
+    }
 });
-
