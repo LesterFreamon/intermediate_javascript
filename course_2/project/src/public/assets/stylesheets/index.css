@@ -3,8 +3,16 @@
 body {
   display: flex;
   flex-direction: column;
-  font-family: Arial;
+  font-family: "Times New Roman", Times, serif;
+  background: linear-gradient(180deg, rgb(171,228,167), rgb(131,215,205));
   min-height: 100vh;
+}
+
+h1 {
+  text-align: center;
+}
+nav {
+  text-align: center;
 }
 
 header {
@@ -35,4 +43,38 @@ footer {
 
 @media (min-width: 1824px) {
   /* use mobile */
+}
+
+.rover-info {
+  border: 1px solid black;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  margin: 20px auto;
+  background-color: #fafafa;
+}
+
+.rover-info h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.rover-info dl {
+  font-size: 16px;
+}
+
+.rover-info dt {
+  font-weight: bold;
+  color: #555;
+  margin-top: 10px;
+}
+
+.rover-info dd {
+  margin-left: 20px;
+  color: #777;
+}
+.meta-data {
+  border-right: 1px solid lightgray;
 }
